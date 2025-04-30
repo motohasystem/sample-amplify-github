@@ -66,7 +66,7 @@ export class CdkStack extends cdk.Stack {
             appId: amplifyApp.attrAppId,
             branchName: 'main',
             framework: "Next.js - SSR",
-            enableAutoBuild: false,
+            enableAutoBuild: true,
         });
     }
 }
