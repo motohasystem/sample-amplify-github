@@ -42,7 +42,7 @@ export class CdkStack extends cdk.Stack {
                                 },
                             },
                             artifacts: {
-                                baseDirectory: ".next",
+                                baseDirectory: "dist",
                                 files: ["**/*"],
                             },
                             cache: {
@@ -65,7 +65,7 @@ export class CdkStack extends cdk.Stack {
         new CfnBranch(this, "AmplifyBranch", {
             appId: amplifyApp.attrAppId,
             branchName: 'main',
-            framework: "Next.js - SSR",
+            // framework: "Next.js - SSR",
             enableAutoBuild: true,
         });
     }
