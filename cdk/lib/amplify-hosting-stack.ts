@@ -52,7 +52,7 @@ export class CdkStack extends cdk.Stack {
                     },
                 ],
             }).toBuildSpec(),
-            platform: "WEB_COMPUTE",
+            platform: "WEB",
             customRules: [
                 {
                     source: "/<*>",
@@ -65,7 +65,6 @@ export class CdkStack extends cdk.Stack {
         new CfnBranch(this, "AmplifyBranch", {
             appId: amplifyApp.attrAppId,
             branchName: 'main',
-            framework: "none",
             enableAutoBuild: true,
         });
     }
