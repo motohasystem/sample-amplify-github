@@ -3,7 +3,23 @@ import * as cdk from 'aws-cdk-lib';
 import { CdkStack } from '../lib/amplify-hosting-stack';
 
 const app = new cdk.App();
-new CdkStack(app, 'OrganizationHomes20250502', {
+
+// .envファイルから、CDK_STACK_NAMEを読み込む
+const dotenv = require('dotenv');
+const result = dotenv.config();
+if (result.error) {
+    console.log('.envファイルの読み込みに失敗しました。', result.error);
+    process.exit(1);
+}
+// .envファイルから、CDK_STACK_NAMEを取得する
+const cdkStackName = process.env.CDK_STACK_NAME;
+if (!cdkStackName) {
+    console.log('.envファイルにCDK_STACK_NAMEを設定してください。');
+    process.exit(1);
+}
+
+
+new CdkStack(app, cdkStackName, {
     /* If you don't specify 'env', this stack will be environment-agnostic.
      * Account/Region-dependent features and context lookups will not work,
      * but a single synthesized template can be deployed anywhere. */

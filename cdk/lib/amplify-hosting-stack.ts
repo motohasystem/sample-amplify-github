@@ -9,16 +9,33 @@ export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id);
 
+        // dotenvファイルを読み込む
+        const dotenv = require("dotenv");
+        const result = dotenv.config();
+        if (result.error) {
+            console.log("dotenvファイルの読み込みに失敗しました。", result.error);
+            exit(1);
+        }
+
+        // dotenvから、AMP_APP_NAMEとGITHUB_REPOSITORYとASM_SECRET_NAMEを取得する
+        const appName = process.env.AMP_APP_NAME;
+        const githubRepository = process.env.GITHUB_REPOSITORY;
+        const asmSecretName = process.env.ASM_SECRET_NAME;
+        if (!appName || !githubRepository || !asmSecretName) {
+            console.log("dotenvファイルにAMP_APP_NAMEとGITHUB_REPOSITORYとASM_SECRET_NAMEを設定してください。");
+            exit(1);
+        }
+
         const githubToken = secretsmanager.Secret.fromSecretNameV2(
             this,
             `GithubAccessToken`,    // ここは適当な名前に変更してください
-            `github-access-token`,  // // Secrets Managerに登録した「シークレットの名前」
+            asmSecretName,  // // Secrets Managerに登録した「シークレットの名前」
         ).secretValue.unsafeUnwrap();
 
         const amplifyApp = new CfnApp(this, "AmplifyApp", {
-            name: 'dev-organization-homes-motohashi',
+            name: appName,
             oauthToken: githubToken,
-            repository: "https://github.com/motohasystem/sample-amplify-github",
+            repository: githubRepository,
             environmentVariables: [
                 {
                     name: "AMPLIFY_MONOREPO_APP_ROOT",
